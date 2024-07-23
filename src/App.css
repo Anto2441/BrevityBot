@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main_gradient {
+  @apply bg-gradient-to-tl from-stone-100 via-transparent to-yellow-300;
+}
+
+.main_content {
+  @apply flex justify-center items-center flex-col px-10;
+}
+
+.header {
+  @apply w-full flex justify-center items-center flex-col;
+}
+
+.nav {
+  @apply flex justify-between items-center w-full mb-10 pt-3;
+}
+
+.black-btn {
+  @apply rounded-full border border-black bg-black py-1.5 px-5 text-sm text-white transition-all hover:bg-white hover:text-black;
+}
+
+.main-title {
+  @apply mt-5 text-5xl font-extrabold text-black sm:text-6xl text-center;
+}
+
+.title_gradient {
+  @apply bg-gradient-to-r from-teal-400 to-yellow-200 bg-clip-text text-transparent;
+}
+
+.description {
+  @apply mt-5 text-lg text-gray-600 sm:text-xl text-center max-w-2xl;
+}
