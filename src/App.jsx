@@ -5,7 +5,7 @@ import './App.css';
 
 const App = () => {
   return (
-    <main className="main_gradient">
+    <main className="main_background">
       <div className="main_content">
         <Summary />
         <Preview />
