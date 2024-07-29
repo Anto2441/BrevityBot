@@ -41,3 +41,35 @@
 .submit_btn {
   @apply hover:border-gray-700 hover:text-gray-700 absolute inset-y-0 right-0 my-1.5 mr-1.5 flex w-10 items-center justify-center rounded border border-gray-200 font-sans text-sm font-medium text-gray-400;
 }
+
+.article_inset {
+  @apply flex justify-between items-center p-1 border-gray-300;
+}
+
+.link_inset {
+  @apply p-3 flex justify-start items-center flex-row bg-white border border-gray-200 gap-3 rounded-lg cursor-pointer flex-1;
+}
+
+.copy_btn {
+  @apply w-10 h-5 rounded-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer;
+}
+
+.link_text {
+  @apply font-satoshi text-cyan-600 font-medium text-sm truncate max-w-md;
+}
+
+.sub_gradient {
+  @apply font-black bg-gradient-to-r from-cyan-600 to-yellow-200 bg-clip-text text-transparent;
+}
+
+.summary_title {
+  @apply font-satoshi font-bold text-gray-600 text-xl;
+}
+
+.summary_box {
+  @apply rounded-xl border border-gray-200 bg-transparent backdrop-blur p-4;
+}
+
+.summary_text {
+  @apply font-inter font-medium text-sm text-gray-700;
+}
