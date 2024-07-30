@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import linkIcon from '../assets/link.svg';
 import loaderIcon from '../assets/loader.svg';
 import { useLazyGetSummaryQuery } from '../services/article';
-
 import { ArticleItem } from './Article/ArticleItem';
 import { ArticleSummary } from './Article/ArticleSummary';
+import { mockArticleApi } from '../services/mockArticleApi';
 
 const Preview = () => {
   const [article, setArticle] = useState({ url: '', summary: '' });
   const [allArticles, setAllArticles] = useState([]);
+  const [currentArticle, setCurrentArticle] = useState(null);
   const [copied, setCopied] = useState('');
-
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
 
   useEffect(() => {
@@ -18,6 +18,9 @@ const Preview = () => {
       const articlesFromLocalStorage =
         JSON.parse(localStorage.getItem('articles')) || [];
       setAllArticles(articlesFromLocalStorage);
+      if (articlesFromLocalStorage.length > 0) {
+        setCurrentArticle(articlesFromLocalStorage[0]);
+      }
     } catch (e) {
       console.error('Failed to parse articles from local storage:', e);
     }
@@ -26,12 +29,15 @@ const Preview = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await getSummary({ articleUrl: article.url });
+      const { data } = await mockArticleApi.getSummary({
+        articleUrl: article.url,
+      });
       if (data?.summary) {
         const newArticle = { ...article, summary: data.summary };
         const updatedAllArticles = [newArticle, ...allArticles];
-        setArticle(newArticle);
+        setArticle({ url: '', summary: '' });
         setAllArticles(updatedAllArticles);
+        setCurrentArticle(newArticle);
         localStorage.setItem('articles', JSON.stringify(updatedAllArticles));
       } else {
         console.error('No article summary found.', error);
@@ -45,6 +51,17 @@ const Preview = () => {
     setCopied(copyUrl);
     navigator.clipboard.writeText(copyUrl);
     setTimeout(() => setCopied(false), 3000);
+  };
+
+  const handleDelete = (urlToDelete) => {
+    const updatedArticles = allArticles.filter(
+      (article) => article.url !== urlToDelete
+    );
+    setAllArticles(updatedArticles);
+    localStorage.setItem('articles', JSON.stringify(updatedArticles));
+    if (currentArticle?.url === urlToDelete) {
+      setCurrentArticle(updatedArticles.length > 0 ? updatedArticles[0] : null);
+    }
   };
 
   return (
@@ -77,12 +94,13 @@ const Preview = () => {
         </form>
 
         <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
-          {allArticles.map((article, index) => (
+          {allArticles.reverse().map((article, index) => (
             <ArticleItem
               key={index}
               article={article}
               copied={copied}
               handleCopy={handleCopy}
+              handleDelete={handleDelete}
               setArticle={setArticle}
             />
           ))}
@@ -103,7 +121,9 @@ const Preview = () => {
             <span className="text-gray-700">{error?.data?.error}</span>
           </p>
         ) : (
-          article.summary && <ArticleSummary summary={article.summary} />
+          currentArticle?.summary && (
+            <ArticleSummary summary={currentArticle.summary} />
+          )
         )}
       </div>
     </section>
